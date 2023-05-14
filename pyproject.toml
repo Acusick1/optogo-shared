@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "optogo-shared"
+version = "0.1.0"
+description = ""
+authors = ["Andrew Cusick <andrewcusick13@outlook.com>"]
+readme = "README.md"
+packages = [{include = "optogo_shared"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^1.10.7"
+sqlalchemy = "^2.0.13"
+sqlalchemy-utils = "^0.41.1"
+pymongo = "^4.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
