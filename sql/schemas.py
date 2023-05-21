@@ -89,27 +89,6 @@ class RequestBase(BaseModel):
         return request_url
 
 
-class JourneyBase(BaseModel):
-
-    date: date
-    day: int
-    duration: int
-    dep_port: str
-    dep_time: str
-    arr_port: str
-    arr_time: str
-    airline: str
-    stops: int
-    stop_city: Optional[str] = None
-
-    @validator("duration", pre=True)
-    def duration_validate(cls, value):
-        if isinstance(value, str):
-            value = time_from_string(value).seconds / 60
-
-        return value
-
-
 class FlightBase(BaseModel):
 
     number: str
@@ -129,6 +108,28 @@ class FlightBase(BaseModel):
     @validator("number", "dep_port", "arr_port")
     def truncate_validator(cls, value: str):
         return value[:30]
+
+
+class JourneyBase(BaseModel):
+
+    date: date
+    day: int
+    duration: int
+    dep_port: str
+    dep_time: str
+    arr_port: str
+    arr_time: str
+    airline: str
+    stops: int
+    stop_city: Optional[str] = None
+    flights: Optional[list[FlightBase]] = None
+
+    @validator("duration", pre=True)
+    def duration_validate(cls, value):
+        if isinstance(value, str):
+            value = time_from_string(value).seconds / 60
+
+        return value
 
 
 class RequestJourneyBase(BaseModel):
@@ -245,19 +246,19 @@ class FlightOutput(Flight):
 
 class JourneyOutput(Journey):
 
-    flights: Optional[list[FlightOutput]] = None
-
     class Config:
         orm_mode = True
 
 
-class TripOutput(BaseModel):
+class TripBase(BaseModel):
 
     price: int
     currency: str = "USD"
     request: Optional[Request] = None
-    journey_1: Optional[JourneyOutput] = None
-    journey_2: Optional[JourneyOutput] = None
+    journeys: Optional[list[JourneyBase]] = None
+
+
+class TripOutput(BaseModel):
 
     class Config:
         orm_mode = True
