@@ -1,7 +1,7 @@
 import sqlalchemy as sql
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.sql.expression import func
-from shared.sql.database import Base
+from shared.sql.database import Base, engine
 
 
 def truncate_string(*fields):
@@ -90,6 +90,8 @@ class JourneyFlight(Base):
     journey_id = sql.Column(sql.ForeignKey("journey.id"), primary_key=True)
     flight_id = sql.Column(sql.ForeignKey("flight.id"), primary_key=True)
 
+
+Base.metadata.create_all(bind=engine)
 
 """
 class BestPrice(Base):
