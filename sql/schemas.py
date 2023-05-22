@@ -119,6 +119,7 @@ class JourneyBase(BaseModel):
     dep_time: str
     arr_port: str
     arr_time: str
+    arr_day_offset: int
     airline: str
     stops: int
     stop_city: Optional[str] = None

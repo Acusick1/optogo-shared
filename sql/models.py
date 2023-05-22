@@ -44,6 +44,7 @@ class Journey(Base):
     dep_time = sql.Column(sql.String(10))
     arr_port = sql.Column(sql.String(3))
     arr_time = sql.Column(sql.String(10))
+    arr_day_offset = sql.Column(sql.Integer, default=0)
     stops = sql.Column(sql.Integer)
     stop_city = sql.Column(sql.String(30), nullable=True)
     airline = sql.Column(sql.String(40))
