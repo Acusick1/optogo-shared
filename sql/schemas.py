@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime, date
-from pydantic import BaseModel, validator, root_validator
+from pydantic import BaseModel, FutureDate, validator, root_validator
 from typing import Any, Optional
 from shared.utils.dates import time_from_string
 from config import paths, settings
@@ -22,8 +22,8 @@ class RequestBase(BaseModel):
 
     dep_port: str
     arr_port: str
-    dep_date: date
-    ret_date: Optional[date] = None
+    dep_date: FutureDate
+    ret_date: Optional[FutureDate] = None
     flex_option: Optional[int] = 0
     sorted_by: Optional[str] = SORT_OPTIONS[0]
     direct: Optional[bool] = False

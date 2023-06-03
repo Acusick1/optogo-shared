@@ -45,32 +45,6 @@ class Job:
         self.setup_path()
 
     @staticmethod
-    def _post_request(request: schemas.RequestCreate):
-
-        with Session(engine) as session:
-
-            request_db = models.Request(**request.dict())
-
-            try:
-                session.add(request_db)
-                session.commit()
-                session.refresh(request_db)
-
-            except IntegrityError:
-
-                session.rollback()
-
-                # Should not have to do this, but workaround for (sqlalchemy) bug that tries to insert from pk=1 again
-                last_id = session.query(func.max(models.Request.id)).first()
-                request_db.id = last_id[0] + 1
-
-                session.add(request_db)
-                session.commit()
-                session.refresh(request_db)
-
-        return schemas.Request(**request_db.__dict__)
-
-    @staticmethod
     def _pull_request(request_id):
 
         with Session(engine) as session:
@@ -153,3 +127,29 @@ class Job:
             request = schemas.Request(**request_db.__dict__)
             # Passing save_path as directory path to ensure saving to input directory
             return Job(request=request, save_path=path, *args, **kwargs)
+
+
+def post_request(request: schemas.RequestCreate):
+
+    with Session(engine) as session:
+
+        request_db = models.Request(**request.dict())
+
+        try:
+            session.add(request_db)
+            session.commit()
+            session.refresh(request_db)
+
+        except IntegrityError:
+
+            session.rollback()
+
+            # Should not have to do this, but workaround for (sqlalchemy) bug that tries to insert from pk=1 again
+            last_id = session.query(func.max(models.Request.id)).first()
+            request_db.id = last_id[0] + 1
+
+            session.add(request_db)
+            session.commit()
+            session.refresh(request_db)
+
+    return schemas.Request(**request_db.__dict__)
