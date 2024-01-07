@@ -153,3 +153,10 @@ def post_request(request: schemas.RequestCreate):
             session.refresh(request_db)
 
     return schemas.Request(**request_db.__dict__)
+
+
+def update_request_status(request: models.Request, status: str):
+
+    with Session(engine) as session:
+        session.query(models.Request).filter_by(id=request.id).update({"status": status.upper()})
+        session.commit()
