@@ -10,25 +10,20 @@ LOGGER = logging.getLogger(__name__)
 
 def open_pika_connection(url: str = settings.cloudamqp_url):
 
-    LOGGER.info("Opening pika connection")
+    LOGGER.info(f"Opening pika connection to: {url.split('@')[-1]}")
     
-    try:
-        params = pika.URLParameters(url)
-        connection = pika.BlockingConnection(params)
-
-    except Exception as e:
-
+    if "amazonaws" in url:
         # SSL Context for TLS configuration of Amazon MQ for RabbitMQ
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         ssl_context.set_ciphers('ECDHE+AESGCM:!ECDSA')
 
-        parameters = pika.URLParameters(url)
-        parameters.ssl_options = pika.SSLOptions(context=ssl_context)
+        params = pika.URLParameters(url)
+        params.ssl_options = pika.SSLOptions(context=ssl_context)
+    else:
+        params = pika.URLParameters(url)
 
-        connection = pika.BlockingConnection(parameters)
 
-    return connection
-
+    return pika.BlockingConnection(params)
 
 
 def consume(queue: str, callback: Callable, url: str = settings.cloudamqp_url, prefetch: int = 1):
