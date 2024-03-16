@@ -247,6 +247,8 @@ class FlightOutput(Flight):
 
 class JourneyOutput(Journey):
 
+    flights: Optional[list[FlightOutput]] = None
+
     class Config:
         orm_mode = True
 
@@ -255,19 +257,28 @@ class TripBase(BaseModel):
 
     price: int
     currency: str = "USD"
-    request: Optional[Request] = None
-    journeys: Optional[list[JourneyBase]] = None
+    # request: Optional[Request] = None
+    journey_1: JourneyBase
+    journey_2: Optional[JourneyBase] = None
 
 
-class TripOutput(BaseModel):
+class TripOutput(TripBase):
 
     class Config:
         orm_mode = True
 
 
+class RequestJourneyOutput(RequestJourney):
+
+    journey_1: JourneyOutput
+    journey_2: Optional[JourneyOutput] = None
+
+    class Config:
+        orm_mode = True
+
 class RequestOutput(Request):
 
-    results: Optional[list[TripOutput]] = None
+    results: Optional[list[RequestJourneyOutput]] = None
 
     class Config:
         orm_mode = True
