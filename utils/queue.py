@@ -1,5 +1,6 @@
 import logging
 import pika
+import ssl
 from pika.adapters.blocking_connection import BlockingChannel
 from typing import Callable
 from config import settings
@@ -10,8 +11,23 @@ LOGGER = logging.getLogger(__name__)
 def open_pika_connection(url: str = settings.cloudamqp_url):
 
     LOGGER.info("Opening pika connection")
-    params = pika.URLParameters(url)
-    return pika.BlockingConnection(params)
+    
+    try:
+        params = pika.URLParameters(url)
+        connection = pika.BlockingConnection(params)
+
+    except Exception as e:
+
+        # SSL Context for TLS configuration of Amazon MQ for RabbitMQ
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        ssl_context.set_ciphers('ECDHE+AESGCM:!ECDSA')
+
+        parameters = pika.URLParameters(url)
+        parameters.ssl_options = pika.SSLOptions(context=ssl_context)
+
+        connection = pika.BlockingConnection(parameters)
+
+    return connection
 
 
 
