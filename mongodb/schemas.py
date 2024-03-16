@@ -73,6 +73,9 @@ class AirportOutput(Airport):
     num_dep: Optional[int] = None
     num_arr: Optional[int] = None
 
+    class Config:
+        orm_mode = True
+
 
 class StopoverOutput(BaseModel):
 
