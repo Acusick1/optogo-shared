@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Any, Optional, Union
 from pydantic import BaseModel, root_validator, validator
 
 
@@ -72,18 +72,26 @@ class AirportOutput(Airport):
     # Derived, not present in raw data
     num_dep: Optional[int] = None
     num_arr: Optional[int] = None
+    dist: Optional[dict[str, Any]] = None
 
     class Config:
         orm_mode = True
 
 
-class StopoverOutput(BaseModel):
+class NumAirportConnectionsOutput(BaseModel):
 
-    dep_iata: str
-    arr_iata: str
-    dep_links: int
-    arr_links: int
+    num_dep_links: int
+    num_arr_links: int
     connection: Union[Airport, str]  # If airport not found in database, output identifier instead
+
+    class Config:
+        orm_mode = True
+
+
+class AirportConnectionsOutput(AirportOutput):
+
+    dep_links: list[Route]
+    arr_links: list[Route]
 
     class Config:
         orm_mode = True
