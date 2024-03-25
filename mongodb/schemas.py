@@ -72,6 +72,13 @@ class AirportOutput(Airport):
     # Derived, not present in raw data
     num_dep: Optional[int] = None
     num_arr: Optional[int] = None
+
+    class Config:
+        orm_mode = True
+
+
+class AirportDistOutput(AirportOutput):
+    
     dist: Optional[dict[str, Any]] = None
 
     class Config:
