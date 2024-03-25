@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, date
 import re
 
 PERIOD_MAPPING = {
@@ -31,3 +31,23 @@ def minutes_from_string(v: str):
 
     t = time_from_string(v)
     return t.seconds / 60
+
+
+def calculate_weekdays(departure_date: date, flexibility: int = 0):
+    
+    weekdays = []
+    for offset in range(-flexibility, flexibility + 1):
+        
+        day = departure_date + timedelta(days=offset)
+        
+        #  Adding one to get Sunday as first day (0)
+        weekdays.append((day.weekday() + 1) % 7)
+
+    return list(set(weekdays))
+
+
+from datetime import datetime
+def calculate_min_departure_time(arrival_time_str: str, min_stopover_hours: int = 2):
+    arrival_time = datetime.strptime(arrival_time_str, '%H:%M')
+    min_departure_time = arrival_time + timedelta(hours=min_stopover_hours)
+    return min_departure_time.strftime('%H:%M')
