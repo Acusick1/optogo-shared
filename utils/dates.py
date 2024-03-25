@@ -44,10 +44,3 @@ def calculate_weekdays(departure_date: date, flexibility: int = 0):
         weekdays.append((day.weekday() + 1) % 7)
 
     return list(set(weekdays))
-
-
-from datetime import datetime
-def calculate_min_departure_time(arrival_time_str: str, min_stopover_hours: int = 2):
-    arrival_time = datetime.strptime(arrival_time_str, '%H:%M')
-    min_departure_time = arrival_time + timedelta(hours=min_stopover_hours)
-    return min_departure_time.strftime('%H:%M')
