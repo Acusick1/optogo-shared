@@ -49,6 +49,10 @@ class Location(BaseModel):
     coordinates: list[float]
 
 
+class Distance(BaseModel):
+    calculated: float
+
+
 class Airport(BaseModel):
     iata_code: Optional[str]
     icao_code: Optional[str]
@@ -79,7 +83,7 @@ class AirportOutput(Airport):
 
 class AirportDistOutput(AirportOutput):
     
-    dist: Optional[dict[str, Any]] = None
+    dist: Distance
 
     class Config:
         orm_mode = True
