@@ -129,7 +129,7 @@ class Job:
             return Job(request=request, save_path=path, *args, **kwargs)
 
 
-def post_request(request: schemas.RequestCreate):
+def post_request_to_db(request: schemas.RequestCreate):
 
     with Session(engine) as session:
 

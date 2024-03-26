@@ -2,6 +2,7 @@ import logging
 from datetime import datetime, date
 from pydantic import BaseModel, FutureDate, validator, root_validator
 from typing import Any, Optional
+from api import types
 from shared.utils.dates import time_from_string
 from config import paths, settings
 
@@ -20,10 +21,10 @@ SORT_OPTIONS = {
 
 class RequestBase(BaseModel):
 
-    dep_port: str
-    arr_port: str
-    dep_date: FutureDate
-    ret_date: Optional[FutureDate] = None
+    dep_port: types.IataLonExample
+    arr_port: types.IataIstExample
+    dep_date: types.Date
+    ret_date: Optional[types.Date] = None
     flex_option: Optional[int] = 0
     sorted_by: Optional[str] = SORT_OPTIONS[0]
     direct: Optional[bool] = False
@@ -149,6 +150,9 @@ class JourneyFlightBase(BaseModel):
 
 
 class RequestCreate(RequestBase):
+
+    dep_date: FutureDate
+    ret_date: Optional[FutureDate] = None
     # use_proxy: Optional[bool] = False
     pass
 
