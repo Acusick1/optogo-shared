@@ -1,16 +1,15 @@
-
-from pydantic import BaseModel, validator
 from typing import Optional
 
-import shared.sql.schemas as sql_schemas
+from pydantic import BaseModel, validator
+
 import shared.mongodb.schemas as mdb_schemas
+import shared.sql.schemas as sql_schemas
 from shared.mongodb.database import get_db
 
 db = get_db()
 
 
 class FlightOutput(BaseModel):
-
     id: int
     number: str
     duration: int
@@ -24,11 +23,12 @@ class FlightOutput(BaseModel):
 
     @validator("dep_port", "arr_port", pre=True)
     def get_port(cls, value: str):
-        return mdb_schemas.AirportOutput(**db.airports.find_one({"iata_code": value.upper()}))
-    
+        return mdb_schemas.AirportOutput(
+            **db.airports.find_one({"iata_code": value.upper()})
+        )
+
 
 class JourneyOutput(sql_schemas.Journey):
-
     flights: Optional[list[FlightOutput]] = None
 
     class Config:
@@ -36,7 +36,6 @@ class JourneyOutput(sql_schemas.Journey):
 
 
 class RequestJourneyOutput(sql_schemas.RequestJourney):
-
     journey_1: JourneyOutput
     journey_2: Optional[JourneyOutput] = None
 
@@ -45,8 +44,9 @@ class RequestJourneyOutput(sql_schemas.RequestJourney):
 
 
 class RequestOutput(sql_schemas.Request):
-
-    results: Optional[list[RequestJourneyOutput] | dict[str, list[RequestJourneyOutput]]] = None
+    results: Optional[
+        list[RequestJourneyOutput] | dict[str, list[RequestJourneyOutput]]
+    ] = None
 
     class Config:
         orm_mode = True

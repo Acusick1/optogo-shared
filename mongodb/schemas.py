@@ -1,4 +1,5 @@
-from typing import Any, Optional, Union
+from typing import Optional, Union
+
 from pydantic import BaseModel, root_validator, validator
 
 
@@ -34,7 +35,9 @@ class Route(BaseModel):
         iata = values.get("flight_iata")
 
         if not any((icao, iata)):
-            raise ValueError("At least one of flight_iata or flight_icao must be specified.")
+            raise ValueError(
+                "At least one of flight_iata or flight_icao must be specified."
+            )
 
         return values
 
@@ -66,13 +69,14 @@ class Airport(BaseModel):
         iata = values.get("iata_code")
 
         if not any((icao, iata)):
-            raise ValueError("At least one of icao_code or iata_code must be specified.")
+            raise ValueError(
+                "At least one of icao_code or iata_code must be specified."
+            )
 
         return values
 
 
 class AirportOutput(Airport):
-
     # Derived, not present in raw data
     num_dep: Optional[int] = None
     num_arr: Optional[int] = None
@@ -82,7 +86,6 @@ class AirportOutput(Airport):
 
 
 class AirportDistOutput(AirportOutput):
-    
     dist: Distance
 
     class Config:
@@ -90,17 +93,17 @@ class AirportDistOutput(AirportOutput):
 
 
 class NumAirportConnectionsOutput(BaseModel):
-
     num_dep_links: int
     num_arr_links: int
-    connection: Union[Airport, str]  # If airport not found in database, output identifier instead
+    connection: Union[
+        Airport, str
+    ]  # If airport not found in database, output identifier instead
 
     class Config:
         orm_mode = True
 
 
 class AirportConnectionsOutput(AirportOutput):
-
     dep_links: list[Route]
     arr_links: list[Route]
 

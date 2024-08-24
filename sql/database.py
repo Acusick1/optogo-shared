@@ -1,10 +1,12 @@
+from config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 from sqlalchemy_utils import create_database, database_exists
-from config import settings
 
-DATABASE_URI = f'postgresql://{settings.db_username}:{settings.db_password}' \
-    f'@{settings.db_host}:{settings.db_port}/{settings.db_name}'
+DATABASE_URI = (
+    f"postgresql://{settings.db_username}:{settings.db_password}"
+    f"@{settings.db_host}:{settings.db_port}/{settings.db_name}"
+)
 
 # create the postgres database engine
 engine = create_engine(DATABASE_URI)

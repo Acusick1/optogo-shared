@@ -19,7 +19,12 @@ def rmdir(directory: Path):
     directory.rmdir()
 
 
-def move_dir(path: Path, to: Optional[Path] = None, name: Optional[str] = None, parents: bool = False):
+def move_dir(
+    path: Path,
+    to: Optional[Path] = None,
+    name: Optional[str] = None,
+    parents: bool = False,
+):
     """
     Move a directory to a new location.
     Multiple use cases:

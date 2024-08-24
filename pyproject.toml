@@ -13,6 +13,8 @@ sqlalchemy = "^2.0.13"
 sqlalchemy-utils = "^0.41.1"
 pymongo = "^4.3.3"
 psycopg2-binary = "^2.9.6"
+ruff = "^0.6.2"
+pre-commit = "^3.8.0"
 
 
 [build-system]

@@ -1,6 +1,7 @@
 import sqlalchemy as sql
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.sql.expression import func
+
 from shared.sql.database import Base, engine
 
 
@@ -23,7 +24,9 @@ class Request(Base):
     status = sql.Column(sql.String(20), nullable=True)
     dep_date = sql.Column(sql.Date)
     ret_date = sql.Column(sql.Date, nullable=True)
-    dep_port = sql.Column(sql.String(20))  # Large to allow multiple IATA codes to be specified.
+    dep_port = sql.Column(
+        sql.String(20)
+    )  # Large to allow multiple IATA codes to be specified.
     arr_port = sql.Column(sql.String(20))
     flex_option = sql.Column(sql.Integer)
     sorted_by = sql.Column(sql.String(30))
@@ -67,6 +70,7 @@ class RequestJourney(Base):
     request = relationship("Request", back_populates="results")
     journey_1 = relationship("Journey", foreign_keys=[journey_id_1], lazy="joined")
     journey_2 = relationship("Journey", foreign_keys=[journey_id_2], lazy="joined")
+
 
 # Not currently in use since get_or_add will see non-truncated schemas as new model entries.
 # class Flight(Base, truncate_string("number", "dep_port", "arr_port")):

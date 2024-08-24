@@ -1,12 +1,7 @@
-from datetime import timedelta, date
 import re
+from datetime import date, timedelta
 
-PERIOD_MAPPING = {
-    "days": "d",
-    "hours": "h",
-    "minutes": "m",
-    "seconds": "s"
-}
+PERIOD_MAPPING = {"days": "d", "hours": "h", "minutes": "m", "seconds": "s"}
 
 
 def time_from_string(v: str):
@@ -18,7 +13,6 @@ def time_from_string(v: str):
 
     args = {}
     for group in out:
-
         for key, val in PERIOD_MAPPING.items():
             if group[-1].startswith(val):
                 args[key] = int(group[1])
@@ -28,18 +22,15 @@ def time_from_string(v: str):
 
 
 def minutes_from_string(v: str):
-
     t = time_from_string(v)
     return t.seconds / 60
 
 
 def calculate_weekdays(departure_date: date, flexibility: int = 0):
-    
     weekdays = []
     for offset in range(-flexibility, flexibility + 1):
-        
         day = departure_date + timedelta(days=offset)
-        
+
         #  Adding one to get Sunday as first day (0)
         weekdays.append((day.weekday() + 1) % 7)
 

@@ -1,26 +1,19 @@
 import logging
-from datetime import datetime, date
-from pydantic import BaseModel, FutureDate, validator, root_validator
+from datetime import date, datetime
 from typing import Any, Optional
+
 from api import types
-from shared.utils.dates import time_from_string
 from config import paths, settings
+from pydantic import BaseModel, FutureDate, root_validator, validator
 
-FLEXIBILITY = {
-    1: "flexible-1day",
-    2: "flexible-2days",
-    3: "flexible-3days"
-}
+from shared.utils.dates import time_from_string
 
-SORT_OPTIONS = {
-    0: "bestflight",
-    1: "price",
-    2: "duration"
-}
+FLEXIBILITY = {1: "flexible-1day", 2: "flexible-2days", 3: "flexible-3days"}
+
+SORT_OPTIONS = {0: "bestflight", 1: "price", 2: "duration"}
 
 
 class RequestBase(BaseModel):
-
     dep_port: types.IataLonExample
     arr_port: types.IataIstExample
     dep_date: types.Date
@@ -53,18 +46,18 @@ class RequestBase(BaseModel):
 
     @root_validator()
     def date_increase_validate(cls, values):
-
         dep_date = values.get("dep_date")
         ret_date = values.get("ret_date", None)
 
         if ret_date is not None:
             if dep_date > ret_date:
-                raise ValueError(f"ret_date must be greater than or equal to dep_date: {ret_date} !> {values['dep_date']}")
+                raise ValueError(
+                    f"ret_date must be greater than or equal to dep_date: {ret_date} !> {values['dep_date']}"
+                )
 
         return values
 
     def get_url(self):
-
         def get_date_str(d: datetime.date):
             d_str = d.strftime(settings.date_fmt)
             if self.flex_option:
@@ -91,7 +84,6 @@ class RequestBase(BaseModel):
 
 
 class FlightBase(BaseModel):
-
     number: str
     duration: int
     dep_time: str
@@ -112,7 +104,6 @@ class FlightBase(BaseModel):
 
 
 class JourneyBase(BaseModel):
-
     date: date
     day: int
     duration: int
@@ -135,7 +126,6 @@ class JourneyBase(BaseModel):
 
 
 class RequestJourneyBase(BaseModel):
-
     request_id: int
     journey_id_1: int
     journey_id_2: Optional[int] = None
@@ -144,13 +134,11 @@ class RequestJourneyBase(BaseModel):
 
 
 class JourneyFlightBase(BaseModel):
-
     journey_id: int
     flight_id: int
 
 
 class RequestCreate(RequestBase):
-
     dep_date: FutureDate
     ret_date: Optional[FutureDate] = None
     # use_proxy: Optional[bool] = False
@@ -166,7 +154,6 @@ class JourneyFlightCreate(JourneyFlightBase):
 
 
 class Request(RequestBase):
-
     id: int
     status: Optional[str] = None
     timestamp: datetime
@@ -175,16 +162,18 @@ class Request(RequestBase):
         orm_mode = True
 
     def get_date(self) -> date:
-
         return self.timestamp.date()
 
     def get_date_str(self):
-
         return self.get_date().strftime(settings.date_fmt)
 
     def get_dir(self) -> str:
-
-        params = [self.dep_port, self.arr_port, self.dep_date.strftime(settings.date_fmt), self.sorted_by]
+        params = [
+            self.dep_port,
+            self.arr_port,
+            self.dep_date.strftime(settings.date_fmt),
+            self.sorted_by,
+        ]
         if self.ret_date:
             params.insert(3, self.ret_date.strftime(settings.date_fmt))
         if self.flex_option:
@@ -197,22 +186,18 @@ class Request(RequestBase):
         return stem
 
     def get_save_path(self):
-
         return paths.data_path / self.get_date_str() / self.get_dir()
 
     def adapt_logger(self, logger):
-
         return RequestAdapter(logger, {"id": self.id})
 
 
 class RequestAdapter(logging.LoggerAdapter):
-
     def process(self, msg, kwargs):
-        return '[Request: %s] %s' % (self.extra["id"], msg), kwargs
+        return "[Request: %s] %s" % (self.extra["id"], msg), kwargs
 
 
 class Journey(JourneyBase):
-
     id: int
 
     class Config:
@@ -220,7 +205,6 @@ class Journey(JourneyBase):
 
 
 class Flight(FlightBase):
-
     id: int
 
     class Config:
@@ -228,7 +212,6 @@ class Flight(FlightBase):
 
 
 class RequestJourney(RequestJourneyBase):
-
     id: int
 
     class Config:
@@ -236,7 +219,6 @@ class RequestJourney(RequestJourneyBase):
 
 
 class JourneyFlight(JourneyFlightBase):
-
     id: int
 
     class Config:
@@ -244,13 +226,11 @@ class JourneyFlight(JourneyFlightBase):
 
 
 class FlightOutput(Flight):
-
     class Config:
         orm_mode = True
 
 
 class JourneyOutput(Journey):
-
     flights: Optional[list[FlightOutput]] = None
 
     class Config:
@@ -258,7 +238,6 @@ class JourneyOutput(Journey):
 
 
 class TripBase(BaseModel):
-
     price: int
     currency: str = "USD"
     # request: Optional[Request] = None
@@ -267,21 +246,19 @@ class TripBase(BaseModel):
 
 
 class TripOutput(TripBase):
-
     class Config:
         orm_mode = True
 
 
 class RequestJourneyOutput(RequestJourney):
-
     journey_1: JourneyOutput
     journey_2: Optional[JourneyOutput] = None
 
     class Config:
         orm_mode = True
 
-class RequestOutput(Request):
 
+class RequestOutput(Request):
     results: Optional[list[RequestJourneyOutput]] = None
 
     class Config:
@@ -289,7 +266,6 @@ class RequestOutput(Request):
 
 
 class PriceSummary(BaseModel):
-
     request_id: int
     min: int
     avg: int
@@ -304,6 +280,8 @@ def validate_mapping(d: dict[Any, Any], key_or_value):
     elif key_or_value in d.values():
         v = key_or_value
     else:
-        raise ValueError(f"Input must be either key to map to value, or value directly from: {d}")
+        raise ValueError(
+            f"Input must be either key to map to value, or value directly from: {d}"
+        )
 
     return v

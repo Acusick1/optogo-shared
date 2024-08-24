@@ -1,8 +1,11 @@
 import os
+
 from config import settings
 
 
-def env_variable_set(required_var: str, error: bool = False, verbose: bool = True) -> bool:
+def env_variable_set(
+    required_var: str, error: bool = False, verbose: bool = True
+) -> bool:
     """
     Check if an environment variable is set, checking pydantic BaseSettings and os environment
     :param required_var: Environment variable to check

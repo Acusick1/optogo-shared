@@ -4,16 +4,17 @@ import time
 import typing
 from functools import partial, wraps
 from time import sleep
-from typing import Type
-from typing import Callable
+from typing import Callable, Type
 
 POLL_FREQUENCY = 0.5
 
 
-def async_retry(ignored_exceptions: typing.Iterable[Type[Exception]], sleep_for: float = POLL_FREQUENCY):
+def async_retry(
+    ignored_exceptions: typing.Iterable[Type[Exception]],
+    sleep_for: float = POLL_FREQUENCY,
+):
     async def decorator(func: Callable):
         async def wrapper(*args, **kwargs):
-
             while True:
                 try:
                     return func(*args, **kwargs)
@@ -29,10 +30,12 @@ def async_retry(ignored_exceptions: typing.Iterable[Type[Exception]], sleep_for:
     return decorator
 
 
-def retry(ignored_exceptions: typing.Iterable[Type[Exception]], sleep_for: float = POLL_FREQUENCY):
+def retry(
+    ignored_exceptions: typing.Iterable[Type[Exception]],
+    sleep_for: float = POLL_FREQUENCY,
+):
     def decorator(func: Callable):
         def wrapper(*args, **kwargs):
-
             while True:
                 try:
                     return func(*args, **kwargs)
@@ -48,7 +51,9 @@ def retry(ignored_exceptions: typing.Iterable[Type[Exception]], sleep_for: float
     return decorator
 
 
-def retry_backoff(func=None, exception=Exception, n_tries=5, delay=5, backoff=1, logger=False):
+def retry_backoff(
+    func=None, exception=Exception, n_tries=5, delay=5, backoff=1, logger=False
+):
     """Retry decorator with exponential backoff.
 
     Parameters
