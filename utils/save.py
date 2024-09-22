@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
-from config import settings
+from packages.crawler.config import settings
 
 
 def save_local(data, save_path: Path, filename: str, stamp=False, uid=False):

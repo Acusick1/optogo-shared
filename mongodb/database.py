@@ -1,6 +1,7 @@
-from config import settings
 from pymongo import MongoClient
 from pymongo.database import Database
+
+from packages.config import settings
 
 CLUSTER_URI = f"mongodb+srv://{settings.mdb_username}:{settings.mdb_password}@{settings.mdb_host}/?retryWrites=true&w=majority"
 

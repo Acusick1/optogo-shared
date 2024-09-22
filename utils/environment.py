@@ -1,6 +1,6 @@
 import os
 
-from config import settings
+from packages.config import settings
 
 
 def env_variable_set(

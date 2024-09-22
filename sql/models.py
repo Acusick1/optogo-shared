@@ -2,7 +2,7 @@ import sqlalchemy as sql
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.sql.expression import func
 
-from shared.sql.database import Base, engine
+from packages.shared.sql.database import Base, engine
 
 
 def truncate_string(*fields):
