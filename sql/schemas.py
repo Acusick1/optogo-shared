@@ -18,7 +18,7 @@ class RequestBase(BaseModel):
     arr_port: types.IataIstExample
     dep_date: types.Date
     ret_date: Optional[types.Date] = None
-    flex_option: Optional[int] = 0
+    flex_option: int = 0
     sorted_by: Optional[str] = SORT_OPTIONS[0]
     direct: Optional[bool] = False
 
@@ -58,7 +58,7 @@ class RequestBase(BaseModel):
         return values
 
     def get_url(self):
-        def get_date_str(d: datetime.date):
+        def get_date_str(d: types.Date):
             d_str = d.strftime(settings.date_fmt)
             if self.flex_option:
                 d_str += f"-{FLEXIBILITY[self.flex_option]}"

@@ -21,9 +21,9 @@ def time_from_string(v: str):
     return timedelta(**args)
 
 
-def minutes_from_string(v: str):
+def minutes_from_string(v: str) -> int:
     t = time_from_string(v)
-    return t.seconds / 60
+    return int(t.seconds / 60)
 
 
 def calculate_weekdays(departure_date: date, flexibility: int = 0):

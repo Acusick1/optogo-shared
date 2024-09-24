@@ -4,6 +4,7 @@ from typing import Callable
 
 import pika
 from pika.adapters.blocking_connection import BlockingChannel
+from pika.spec import PERSISTENT_DELIVERY_MODE
 
 from packages.config import settings
 
@@ -58,8 +59,6 @@ def publish(channel: BlockingChannel, queue: str, body):
     channel.basic_publish(
         exchange="",
         routing_key=queue,
-        properties=pika.BasicProperties(
-            delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
-        ),
+        properties=pika.BasicProperties(delivery_mode=PERSISTENT_DELIVERY_MODE),
         body=body,
     )

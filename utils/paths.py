@@ -50,7 +50,7 @@ def move_dir(
     path.rename(new_path)
 
 
-def mv_parent_swap(path: Path, new_parent: Path | str, level: int = 0):
+def mv_parent_swap(path: Path, new_parent: str, level: int = 0):
     """
     Move a file from one parent folder to another
     Note: Can be used for directories but will fail if new path already exists (i.e. trying to merge folders)

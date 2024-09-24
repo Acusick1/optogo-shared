@@ -23,9 +23,8 @@ class FlightOutput(BaseModel):
 
     @validator("dep_port", "arr_port", pre=True)
     def get_port(cls, value: str):
-        return mdb_schemas.AirportOutput(
-            **db.airports.find_one({"iata_code": value.upper()})
-        )
+        port = db.airports.find_one({"iata_code": value.upper()})
+        return mdb_schemas.AirportOutput(**port)
 
 
 class JourneyOutput(sql_schemas.Journey):

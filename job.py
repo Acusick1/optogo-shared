@@ -25,7 +25,7 @@ class Job:
         self,
         request: schemas.Request | schemas.RequestCreate,
         reset: bool = False,
-        save_path: Optional[Path | str] = None,
+        save_path: Optional[Path] = None,
     ):
         if isinstance(request, schemas.RequestCreate):
             self.request = self._post_request(request)
@@ -99,7 +99,7 @@ class Job:
 
         return request
 
-    def save(self, path: Optional[Path | str] = None):
+    def save(self, path: Optional[Path] = None):
         if path is None:
             path = self.save_path
 
@@ -141,11 +141,12 @@ def post_request_to_db(request: schemas.RequestCreate):
 
             # Should not have to do this, but workaround for (sqlalchemy) bug that tries to insert from pk=1 again
             last_id = session.query(func.max(models.Request.id)).first()
-            request_db.id = last_id[0] + 1
+            if last_id is not None:
+                request_db.id = last_id[0] + 1
 
-            session.add(request_db)
-            session.commit()
-            session.refresh(request_db)
+                session.add(request_db)
+                session.commit()
+                session.refresh(request_db)
 
     return schemas.Request(**request_db.__dict__)
 
