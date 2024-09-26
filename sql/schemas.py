@@ -5,7 +5,7 @@ from typing import Any, Optional
 from pydantic import BaseModel, FutureDate, root_validator, validator
 
 from packages.api import types
-from packages.crawler.config import paths, settings
+from packages.config import paths, settings
 from packages.shared.utils.dates import time_from_string
 
 FLEXIBILITY = {1: "flexible-1day", 2: "flexible-2days", 3: "flexible-3days"}
