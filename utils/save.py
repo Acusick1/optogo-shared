@@ -22,7 +22,7 @@ def save_local(data, save_path: Path, filename: str, stamp=False, uid=False):
     return file_path
 
 
-def save_s3():
+def save_s3(*args, **kwargs):
     raise NotImplementedError
 
 

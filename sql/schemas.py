@@ -4,8 +4,8 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, FutureDate, root_validator, validator
 
-from packages.api import types
 from packages.config import paths, settings
+from packages.shared import types
 from packages.shared.utils.dates import time_from_string
 
 FLEXIBILITY = {1: "flexible-1day", 2: "flexible-2days", 3: "flexible-3days"}
@@ -194,6 +194,9 @@ class Request(RequestBase):
 
 class RequestAdapter(logging.LoggerAdapter):
     def process(self, msg, kwargs):
+        if self.extra is None:
+            raise ValueError("Adapter must be initialized with extra dict")
+
         return "[Request: %s] %s" % (self.extra["id"], msg), kwargs
 
 
