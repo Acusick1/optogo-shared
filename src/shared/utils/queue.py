@@ -3,10 +3,9 @@ import ssl
 from typing import Callable
 
 import pika
+from packages.config import settings
 from pika.adapters.blocking_connection import BlockingChannel
 from pika.spec import PERSISTENT_DELIVERY_MODE
-
-from packages.config import settings
 
 LOGGER = logging.getLogger(__name__)
 

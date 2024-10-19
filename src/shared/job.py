@@ -7,9 +7,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
 
-from packages.shared.sql import models, schemas
-from packages.shared.sql.database import engine
-from packages.shared.utils.paths import rmdir
+from shared.sql import models, schemas
+from shared.sql.database import engine
+from shared.utils.paths import rmdir
 
 # TODO: Should have a generic Job class (move to utils) and create a subclass for ETL related functionality
 # TODO: Should static methods be abstracted? And should methods such as update_status/get_status be static/abstracted

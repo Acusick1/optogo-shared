@@ -2,9 +2,8 @@ from datetime import date
 from typing import Annotated, Literal, Optional
 
 from fastapi import Depends, Path, Query
-from pydantic import BaseModel
-
 from packages.config import settings
+from pydantic import BaseModel
 
 IataLonExample = Annotated[
     str,

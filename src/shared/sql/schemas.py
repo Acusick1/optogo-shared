@@ -2,11 +2,11 @@ import logging
 from datetime import date, datetime
 from typing import Any, Optional
 
+from packages.config import paths, settings
 from pydantic import BaseModel, FutureDate, root_validator, validator
 
-from packages.config import paths, settings
-from packages.shared import types
-from packages.shared.utils.dates import time_from_string
+from shared import types
+from shared.utils.dates import time_from_string
 
 FLEXIBILITY = {1: "flexible-1day", 2: "flexible-2days", 3: "flexible-3days"}
 

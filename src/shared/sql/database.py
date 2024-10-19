@@ -1,8 +1,7 @@
+from packages.config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 from sqlalchemy_utils import create_database, database_exists
-
-from packages.config import settings
 
 DATABASE_URI = (
     f"postgresql://{settings.db_username}:{settings.db_password}"
