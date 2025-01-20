@@ -1,11 +1,12 @@
 [project]
-name = "shared"
+name = "optogo-shared"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+dependencies = [
+    "pydantic <2.0",
+    "sqlalchemy >=2.0.13",
+    "sqlalchemy-utils >=0.41.1",
+    "pymongo >=4.3.3",
+    "psycopg2-binary >=2.9.6",
+    "fastapi>=0.115.0",
+]

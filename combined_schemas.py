@@ -2,9 +2,9 @@ from typing import Optional
 
 from pydantic import BaseModel, validator
 
-import shared.mongodb.schemas as mdb_schemas
-import shared.sql.schemas as sql_schemas
-from shared.mongodb.database import get_db
+import packages.shared.mongodb.schemas as mdb_schemas
+import packages.shared.sql.schemas as sql_schemas
+from packages.shared.mongodb.database import get_db
 
 db = get_db()
 

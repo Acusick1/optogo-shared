@@ -1,6 +1,6 @@
 import os
 
-from packages.crawler.config import settings
+from packages.scraper.config import settings
 
 
 def env_variable_set(
