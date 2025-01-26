@@ -2,8 +2,9 @@ from datetime import date
 from typing import Annotated, Literal, Optional
 
 from fastapi import Depends, Path, Query
-from packages.config import settings
 from pydantic import BaseModel
+
+from packages.config import global_settings
 
 IataLonExample = Annotated[
     str,
@@ -74,7 +75,7 @@ SortOrder = Annotated[
 ]
 Limit = Annotated[
     int,
-    Query(le=settings.return_limit, description="Maximum number of records to return."),
+    Query(le=global_settings.return_limit, description="Maximum number of records to return."),
 ]
 Page = Annotated[
     int,
@@ -114,7 +115,7 @@ LocationSortBy = Annotated[
 class CommonQueryParams(BaseModel):
     sort_by: Optional[GenericSortBy] = None
     sort_order: SortOrder = "1"
-    limit: Limit = settings.return_limit
+    limit: Limit = global_settings.return_limit
     page: Page = 0
 
 

@@ -2,9 +2,9 @@ import logging
 from datetime import date, datetime
 from typing import Any, Optional
 
-from packages.config import paths, settings
 from pydantic import BaseModel, FutureDate, root_validator, validator
 
+from packages.config import global_settings, paths
 from packages.shared.utils import types
 from packages.shared.utils.dates import time_from_string
 
@@ -26,7 +26,7 @@ class RequestBase(BaseModel):
     def date_validate(cls, value):
         if value is not None:
             if isinstance(value, str):
-                value = datetime.strptime(value, settings.date_fmt).date()
+                value = datetime.strptime(value, global_settings.date_fmt).date()
 
             elif not isinstance(value, date):
                 raise ValueError("Value must be type: datetime.date or date string")
@@ -59,7 +59,7 @@ class RequestBase(BaseModel):
 
     def get_url(self):
         def get_date_str(d: types.Date):
-            d_str = d.strftime(settings.date_fmt)
+            d_str = d.strftime(global_settings.date_fmt)
             if self.flex_option:
                 d_str += f"-{FLEXIBILITY[self.flex_option]}"
 
@@ -165,17 +165,17 @@ class Request(RequestBase):
         return self.timestamp.date()
 
     def get_date_str(self):
-        return self.get_date().strftime(settings.date_fmt)
+        return self.get_date().strftime(global_settings.date_fmt)
 
     def get_dir(self) -> str:
         params = [
             self.dep_port,
             self.arr_port,
-            self.dep_date.strftime(settings.date_fmt),
+            self.dep_date.strftime(global_settings.date_fmt),
             self.sorted_by,
         ]
         if self.ret_date:
-            params.insert(3, self.ret_date.strftime(settings.date_fmt))
+            params.insert(3, self.ret_date.strftime(global_settings.date_fmt))
         if self.flex_option:
             params.append(FLEXIBILITY[self.flex_option])
         if self.id is not None:

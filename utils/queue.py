@@ -3,14 +3,15 @@ import ssl
 from typing import Callable
 
 import pika
-from packages.config import settings
 from pika.adapters.blocking_connection import BlockingChannel
 from pika.spec import PERSISTENT_DELIVERY_MODE
+
+from packages.config import global_settings
 
 LOGGER = logging.getLogger(__name__)
 
 
-def open_pika_connection(url: str = settings.cloudamqp_url):
+def open_pika_connection(url: str = global_settings.cloudamqp_url):
     LOGGER.info(f"Opening pika connection to: {url.split('@')[-1]}")
 
     if "amazonaws" in url:
@@ -27,7 +28,7 @@ def open_pika_connection(url: str = settings.cloudamqp_url):
 
 
 def consume(
-    queue: str, callback: Callable, url: str = settings.cloudamqp_url, prefetch: int = 1
+    queue: str, callback: Callable, url: str = global_settings.cloudamqp_url, prefetch: int = 1
 ):
     while True:
         try:
